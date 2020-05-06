@@ -15,8 +15,12 @@
 import AVFoundation
 import UIKit
 import os
+import Starscream
+
+import WatchConnectvity
 
 class ViewController: UIViewController {
+    
   // MARK: Storyboards Connections
   @IBOutlet weak var previewView: PreviewView!
 
@@ -25,14 +29,13 @@ class ViewController: UIViewController {
   @IBOutlet weak var resumeButton: UIButton!
   @IBOutlet weak var cameraUnavailableLabel: UILabel!
 
-  @IBOutlet weak var tableView: UITableView!
-
-  @IBOutlet weak var threadCountLabel: UILabel!
-  @IBOutlet weak var threadCountStepper: UIStepper!
-
-  @IBOutlet weak var delegatesControl: UISegmentedControl!
-
-  // MARK: ModelDataHandler traits
+  @IBOutlet weak var changeCameraButton: UIButton!
+    
+  @IBAction func changeCamera(_ sender: Any) {
+//    cameraCapture.isFrontCamera = !cameraCapture.isFrontCamera
+//    socket.write(string: "Hi Server!")
+  }
+    // MARK: ModelDataHandler traits
   var threadCount: Int = Constants.defaultThreadCount
   var delegate: Delegates = Constants.defaultDelegate
 
@@ -55,10 +58,17 @@ class ViewController: UIViewController {
   // Handles all data preprocessing and makes calls to run inference.
   private var modelDataHandler: ModelDataHandler?
 
+//  var session: WCSession?
+  var socket: WebSocket!
+  var isConnected = false
+//  var socketIOClient: SocketIOClient!
+//  var manager:SocketManager!
+  var request = URLRequest(url: URL(string: "http://192.168.178.21:8080")!)
   // MARK: View Handling Methods
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    changeCameraButton.layer.cornerRadius = 15
+    changeCameraButton.clipsToBounds = true
     do {
       modelDataHandler = try ModelDataHandler()
     } catch let error {
@@ -66,36 +76,13 @@ class ViewController: UIViewController {
     }
 
     cameraCapture.delegate = self
-    tableView.delegate = self
-    tableView.dataSource = self
-
-    // MARK: UI Initialization
-    // Setup thread count stepper with white color.
-    // https://forums.developer.apple.com/thread/121495
-    threadCountStepper.setDecrementImage(
-      threadCountStepper.decrementImage(for: .normal), for: .normal)
-    threadCountStepper.setIncrementImage(
-      threadCountStepper.incrementImage(for: .normal), for: .normal)
-    // Setup initial stepper value and its label.
-    threadCountStepper.value = Double(Constants.defaultThreadCount)
-    threadCountLabel.text = Constants.defaultThreadCount.description
-
-    // Setup segmented controller's color.
-    delegatesControl.setTitleTextAttributes(
-      [NSAttributedString.Key.foregroundColor: UIColor.lightGray],
-      for: .normal)
-    delegatesControl.setTitleTextAttributes(
-      [NSAttributedString.Key.foregroundColor: UIColor.black],
-      for: .selected)
-    // Remove existing segments to initialize it with `Delegates` entries.
-    delegatesControl.removeAllSegments()
-    Delegates.allCases.forEach { delegate in
-      delegatesControl.insertSegment(
-        withTitle: delegate.description,
-        at: delegate.rawValue,
-        animated: false)
-    }
-    delegatesControl.selectedSegmentIndex = 0
+    
+    // Web socket
+    request.timeoutInterval = 5
+    socket = WebSocket(request: request)
+    socket.delegate = self
+    socket.connect()
+    
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -113,48 +100,6 @@ class ViewController: UIViewController {
     previewViewFrame = previewView.frame
   }
 
-  // MARK: Button Actions
-  @IBAction func didChangeThreadCount(_ sender: UIStepper) {
-    let changedCount = Int(sender.value)
-    if threadCountLabel.text == changedCount.description {
-      return
-    }
-
-    do {
-      modelDataHandler = try ModelDataHandler(threadCount: changedCount)
-    } catch let error {
-      fatalError(error.localizedDescription)
-    }
-    threadCount = changedCount
-    threadCountLabel.text = changedCount.description
-    os_log("Thread count is changed to: %d", threadCount)
-  }
-
-  @IBAction func didChangeDelegate(_ sender: UISegmentedControl) {
-    guard let changedDelegate = Delegates(rawValue: delegatesControl.selectedSegmentIndex) else {
-      fatalError("Unexpected value from delegates segemented controller.")
-    }
-    do {
-      modelDataHandler = try ModelDataHandler(threadCount: threadCount, delegate: changedDelegate)
-    } catch let error {
-      fatalError(error.localizedDescription)
-    }
-    delegate = changedDelegate
-    os_log("Delegate is changed to: %s", delegate.description)
-  }
-
-  @IBAction func didTapResumeButton(_ sender: Any) {
-    cameraCapture.resumeInterruptedSession { complete in
-
-      if complete {
-        self.resumeButton.isHidden = true
-        self.cameraUnavailableLabel.isHidden = true
-      } else {
-        self.presentUnableToResumeSessionAlert()
-      }
-    }
-  }
-
   func presentUnableToResumeSessionAlert() {
     let alert = UIAlertController(
       title: "Unable to Resume Session",
@@ -165,7 +110,70 @@ class ViewController: UIViewController {
 
     self.present(alert, animated: true)
   }
+
 }
+
+// MARK: - WebSocketDelegate
+extension ViewController : WebSocketDelegate {
+    func didReceive(event: WebSocketEvent, client: WebSocket) {
+        switch event {
+            case .connected(let headers):
+                isConnected = true
+                print("websocket is connected: \(headers)")
+            case .disconnected(let reason, let code):
+                isConnected = false
+                print("websocket is disconnected: \(reason) with code: \(code)")
+            case .text(let string):
+                handelView(string: string)
+    //            if let validSession = self.session, validSession.isReachable {//5.1
+    //              let data: [String: Any] = ["iPhone": "Data from iPhone" as Any] // Create your Dictionay as per uses
+    //              validSession.sendMessage(data, replyHandler: nil, errorHandler: nil)
+    //            }
+            case .binary(let data):
+                print("Received data: \(data.count)")
+            case .ping(_):
+                break
+            case .pong(_):
+                break
+            case .viabilityChanged(_):
+                break
+            case .reconnectSuggested(_):
+                break
+            case .cancelled:
+                isConnected = false
+                print("canceled")
+            case .error(let error):
+                isConnected = false
+                handleError(error)
+            }
+    }
+    func handelView(string: String) {
+        print(string)
+        guard let data = string.data(using: .utf16),
+          let jsonData = try? JSONSerialization.jsonObject(with: data),
+          let jsonDict = jsonData as? [String: Any],
+          let messageType = jsonDict["type"] as? String else {
+            return
+            
+        }
+        if messageType == "message",
+          let messageData = jsonDict["data"] as? [String: Any],
+          let messageText = messageData["text"] as? String {
+            PopupView.showView(text: messageText)
+        }
+    }
+
+    func handleError(_ error: Error?) {
+        if let e = error as? WSError {
+            print("websocket encountered an error: \(e.message)")
+        } else if let e = error {
+            print("websocket encountered an error: \(e.localizedDescription)")
+        } else {
+            print("websocket encountered an error")
+        }
+    }
+}
+
 
 // MARK: - CameraFeedManagerDelegate Methods
 extension ViewController: CameraFeedManagerDelegate {
@@ -255,7 +263,7 @@ extension ViewController: CameraFeedManagerDelegate {
 
     // Draw result.
     DispatchQueue.main.async {
-      self.tableView.reloadData()
+//      self.tableView.reloadData()
       // If score is too low, clear result remaining in the overlayView.
       if result.score < self.minimumScore {
         self.clearResult()
@@ -277,66 +285,6 @@ extension ViewController: CameraFeedManagerDelegate {
   }
 }
 
-// MARK: - TableViewDelegate, TableViewDataSource Methods
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
-  func numberOfSections(in tableView: UITableView) -> Int {
-    return InferenceSections.allCases.count
-  }
-
-  func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let section = InferenceSections(rawValue: section) else {
-      return 0
-    }
-
-    return section.subcaseCount
-  }
-
-  func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "InfoCell") as! InfoCell
-    guard let section = InferenceSections(rawValue: indexPath.section) else {
-      return cell
-    }
-    guard let data = inferencedData else { return cell }
-
-    var fieldName: String
-    var info: String
-
-    switch section {
-    case .Score:
-      fieldName = section.description
-      info = String(format: "%.3f", data.score)
-    case .Time:
-      guard let row = ProcessingTimes(rawValue: indexPath.row) else {
-        return cell
-      }
-      var time: Double
-      switch row {
-      case .InferenceTime:
-        time = data.times.inference
-      }
-      fieldName = row.description
-      info = String(format: "%.2fms", time)
-    }
-
-    cell.fieldNameLabel.text = fieldName
-    cell.infoLabel.text = info
-
-    return cell
-  }
-
-  func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-    guard let section = InferenceSections(rawValue: indexPath.section) else {
-      return 0
-    }
-
-    var height = Traits.normalCellHeight
-    if indexPath.row == section.subcaseCount - 1 {
-      height = Traits.separatorCellHeight + Traits.bottomSpacing
-    }
-    return height
-  }
-
-}
 
 // MARK: - Private enums
 /// UI coinstraint values
@@ -386,3 +334,4 @@ fileprivate enum ProcessingTimes: Int, CaseIterable {
     }
   }
 }
+

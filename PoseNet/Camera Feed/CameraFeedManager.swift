@@ -60,6 +60,17 @@ class CameraFeedManager: NSObject {
   private var cameraConfiguration: CameraConfiguration = .failed
   private lazy var videoDataOutput = AVCaptureVideoDataOutput()
   private var isSessionRunning = false
+    
+    public var isFrontCamera = true {
+        didSet {
+            switchCamera()
+            session.sessionPreset = .high
+            self.previewView.session = session
+            self.previewView.previewLayer.connection?.videoOrientation = .portrait
+            self.previewView.previewLayer.videoGravity = .resizeAspectFill
+            self.attemptToConfigureSession()
+        }
+    }
 
   // MARK: CameraFeedManagerDelegate
   weak var delegate: CameraFeedManagerDelegate?
@@ -187,10 +198,10 @@ class CameraFeedManager: NSObject {
   }
 
   /// This method tries to an AVCaptureDeviceInput to the current AVCaptureSession.
-  private func addVideoDeviceInput() -> Bool {
+    private func addVideoDeviceInput() -> Bool {
     /// Tries to get the default back camera.
     guard
-      let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front)
+        let camera = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .front)
       else {
         fatalError("Cannot find camera")
     }
@@ -207,7 +218,41 @@ class CameraFeedManager: NSObject {
       fatalError("Cannot create video device input")
     }
   }
+  func switchCamera() {
+    let currentCameraInput: AVCaptureInput = session.inputs[0]
+    session.removeInput(currentCameraInput)
+    var newCamera: AVCaptureDevice
+    newCamera = AVCaptureDevice.default(for: AVMediaType.video)!
 
+      if (currentCameraInput as! AVCaptureDeviceInput).device.position == .back {
+        UIView.transition(with: self.previewView, duration: 0.5, options: .transitionFlipFromLeft, animations: {
+              newCamera = self.cameraWithPosition(.front)!
+          }, completion: nil)
+      } else {
+          UIView.transition(with: self.previewView, duration: 0.5, options: .transitionFlipFromRight, animations: {
+              newCamera = self.cameraWithPosition(.back)!
+          }, completion: nil)
+      }
+      do {
+          try session.addInput(AVCaptureDeviceInput(device: newCamera))
+      }
+      catch {
+          print("error: \(error.localizedDescription)")
+      }
+    
+
+  }
+
+  func cameraWithPosition(_ position: AVCaptureDevice.Position) -> AVCaptureDevice? {
+      let deviceDescoverySession = AVCaptureDevice.DiscoverySession.init(deviceTypes: [AVCaptureDevice.DeviceType.builtInWideAngleCamera], mediaType: AVMediaType.video, position: AVCaptureDevice.Position.unspecified)
+
+      for device in deviceDescoverySession.devices {
+          if device.position == position {
+              return device
+          }
+      }
+      return nil
+  }
   /// This method tries to an AVCaptureVideoDataOutput to the current AVCaptureSession.
   private func addVideoDataOutput() -> Bool {
     let sampleBufferQueue = DispatchQueue(label: "sampleBufferQueue")
