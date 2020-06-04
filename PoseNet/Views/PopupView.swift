@@ -47,44 +47,182 @@ class PopupView {
             switch thirdChar {
             case "0": // Text
                 showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
-            case "1": // Photo
-                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
-            case "2": // Voice
-                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
-            case "3": // TextVoice
-                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
-            case "4": // PhotoVoice
+            case "1": // Posenet
                 showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
             default:
-                print("Wrong button")
+                print("Wrong button A1")
             }
             
         case "A2":
-            showAlertView(attributes: attributes, receivedText: "Sagging midsection", descriptionText: "Keep hips in line with shoulders", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Sagging midsection"
+            let descriptionText = "Keep hips in line with shoulders"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button A2")
+            }
         case "A3":
-                showAlertView(attributes: attributes, receivedText: "Hands in front of shoulders, elbows in “T-shape”", descriptionText: "Put your hands directly under your shoulders, elbows in “A-shape”", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Hands in front of shoulders, elbows in “T-shape”"
+            let descriptionText = "Put your hands directly under your shoulders, elbows in “A-shape”"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button A3")
+            }
         case "B1":
-                showAlertView(attributes: attributes, receivedText: "Hips too high", descriptionText: "Keep hips in line with shoulders and heels", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Hips too high"
+            let descriptionText = "Keep hips in line with shoulders and heels"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button B1")
+            }
         case "B2":
-                showAlertView(attributes: attributes, receivedText: "Hips too low", descriptionText: "Keep hips in line with shoulders and heels", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Hips too low"
+            let descriptionText = "Keep hips in line with shoulders and heels"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button B2")
+            }
         case "C1":
-                showAlertView(attributes: attributes, receivedText: "Pulling on your neck", descriptionText: "Keep your neck straight, in line with your upper back", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Pulling on your neck"
+            let descriptionText = "Keep your neck straight, in line with your upper back"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button C1")
+            }
         case "C2":
-                showAlertView(attributes: attributes, receivedText: "Leading with the chin (poking your chin out)", descriptionText: "Keep your chin tucked in and your eyes facing straight ahead", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Leading with the chin (poking your chin out)"
+            let descriptionText = "Keep your chin tucked in and your eyes facing straight ahead"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button C2")
+            }
+            
         case "C3":
-                showAlertView(attributes: attributes, receivedText: "Anchoring your feet", descriptionText: "Keep your feet stable on the floor", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Anchoring your feet"
+            let descriptionText = "Keep your feet stable on the floor"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button C3")
+            }
         case "D1":
-                showAlertView(attributes: attributes, receivedText: "Knees caving in", descriptionText: "Keep knees in line with your toes or slightly pushed out", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Knees caving in"
+            let descriptionText = "Keep knees in line with your toes or slightly pushed out"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button D1")
+            }
         case "D2":
-                showAlertView(attributes: attributes, receivedText: "Bending the knees first", descriptionText: "Initiate the squat by pushing your hips back", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Bending the knees first"
+            let descriptionText = "Initiate the squat by pushing your hips back"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button D2")
+            }
         case "E1":
-                showAlertView(attributes: attributes, receivedText: "Front knee too far forward", descriptionText: "Try to keep your front knee over your toes", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Front knee too far forward"
+            let descriptionText = "Try to keep your front knee over your toes"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button E1")
+            }
         case "E2":
-                showAlertView(attributes: attributes, receivedText: "Excessive forward lean in upper body", descriptionText: "Look straight ahead and try to keep your chest up", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Excessive forward lean in upper body"
+            let descriptionText = "Look straight ahead and try to keep your chest up"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button E2")
+            }
         case "F1":
-                showAlertView(attributes: attributes, receivedText: "Overarching the back", descriptionText: "Try to keep your lower back in a neutral position", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Overarching the back"
+            let descriptionText = "Try to keep your lower back in a neutral position"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button F1")
+            }
         case "F2":
-                showAlertView(attributes: attributes, receivedText: "Foot turns inward or outward", descriptionText: "Keep your foot parallel to your lower leg, even if you move your thigh to the side", ringTone: 1007, imageName: warningImage)
+            let receicedText = "Foot turns inward or outward"
+            let descriptionText = "Keep your foot parallel to your lower leg, even if you move your thigh to the side"
+            let thirdChar = text[text.index(text.startIndex, offsetBy: 2)]
+
+            switch thirdChar {
+            case "0": // Text
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            case "1": // Posenet
+                showAlertView(attributes: attributes, receivedText: receicedText, descriptionText: descriptionText, ringTone: 1007, imageName: warningImage)
+            default:
+                print("Wrong button F2")
+            }
         case "CorrectInfo":
         showAlertView(attributes: attributes, receivedText: "Correct", descriptionText: "Perfect", ringTone: 1010, imageName: "ic_success")
         default:
@@ -169,8 +307,11 @@ class PopupView {
         )
         let contentView = EKAlertMessageView(with: alertMessage)
         SwiftEntryKit.display(entry: contentView, using: attributes)
+        
+        // Sound effect
 //        AudioServicesPlayAlertSound(SystemSoundID(ringTone))
 
+        // Voice speak
         let utterance = AVSpeechUtterance(string: descriptionText)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
 

@@ -23,7 +23,8 @@ class OverlayView: UIView {
   var dots = [CGPoint]()
   var lines = [Line]()
   typealias NewDot = (x: CGFloat, y: CGFloat)
-
+  static var dotStyle = (radius: CGFloat(15), color: UIColor.orange)
+  static var lineStyle = (width: CGFloat(3.0), color: UIColor.orange)
   @IBInspectable
   var sizeMultiplier : CGFloat = 0.2{
       didSet{
@@ -61,21 +62,21 @@ class OverlayView: UIView {
   func drawDot(of dot: CGPoint) {
     let newDot: NewDot = mirrorImage(x: dot.x, y: dot.y)
     let dotRect = CGRect(
-      x: newDot.x - Traits.dot.radius / 2, y: newDot.y - Traits.dot.radius / 2,
-      width: Traits.dot.radius, height: Traits.dot.radius)
+        x: newDot.x - OverlayView.dotStyle.radius / 2, y: newDot.y - OverlayView.dotStyle.radius / 2,
+        width: OverlayView.dotStyle.radius, height: OverlayView.dotStyle.radius)
     let dotPath = UIBezierPath(ovalIn: dotRect)
     
-    Traits.dot.color.setFill()
+    OverlayView.dotStyle.color.setFill()
     dotPath.fill()
   }
     
   func backDrawDot(of dot: CGPoint) {
     let dotRect = CGRect(
-    x: dot.x - Traits.dot.radius / 2, y: dot.y - Traits.dot.radius / 2,
-    width: Traits.dot.radius, height: Traits.dot.radius)
+        x: dot.x - OverlayView.dotStyle.radius / 2, y: dot.y - OverlayView.dotStyle.radius / 2,
+        width: OverlayView.dotStyle.radius, height: OverlayView.dotStyle.radius)
     let dotPath = UIBezierPath(ovalIn: dotRect)
 
-    Traits.dot.color.setFill()
+    OverlayView.dotStyle.color.setFill()
     dotPath.fill()
   }
     
@@ -92,8 +93,8 @@ class OverlayView: UIView {
     linePath.addLine(to: CGPoint(x: toDot.x, y: toDot.y))
     linePath.close()
 
-    linePath.lineWidth = Traits.line.width
-    Traits.line.color.setStroke()
+    linePath.lineWidth = OverlayView.lineStyle.width
+    OverlayView.lineStyle.color.setStroke()
 
     linePath.stroke()
   }
@@ -104,8 +105,8 @@ class OverlayView: UIView {
     linePath.addLine(to: CGPoint(x: line.to.x, y: line.to.y))
     linePath.close()
 
-    linePath.lineWidth = Traits.line.width
-    Traits.line.color.setStroke()
+    linePath.lineWidth = OverlayView.lineStyle.width
+    OverlayView.lineStyle.color.setStroke()
 
     linePath.stroke()
   }
@@ -157,7 +158,3 @@ class OverlayView: UIView {
   }
 }
 
-private enum Traits {
-  static let dot = (radius: CGFloat(10), color: UIColor.orange)
-  static let line = (width: CGFloat(2.0), color: UIColor.orange)
-}

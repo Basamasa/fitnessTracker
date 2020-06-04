@@ -14,10 +14,9 @@
 
 import AVFoundation
 import UIKit
+import WatchConnectivity
 import os
 import Starscream
-
-import WatchConnectvity
 
 class ViewController: UIViewController {
     
@@ -33,7 +32,6 @@ class ViewController: UIViewController {
     
   @IBAction func changeCamera(_ sender: Any) {
 //    cameraCapture.isFrontCamera = !cameraCapture.isFrontCamera
-//    socket.write(string: "Hi Server!")
   }
     // MARK: ModelDataHandler traits
   var threadCount: Int = Constants.defaultThreadCount
@@ -58,12 +56,12 @@ class ViewController: UIViewController {
   // Handles all data preprocessing and makes calls to run inference.
   private var modelDataHandler: ModelDataHandler?
 
-//  var session: WCSession?
   var socket: WebSocket!
   var isConnected = false
-//  var socketIOClient: SocketIOClient!
-//  var manager:SocketManager!
   var request = URLRequest(url: URL(string: "http://192.168.178.21:8080")!)
+  var session: WCSession?//2
+    
+    
   // MARK: View Handling Methods
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -83,6 +81,11 @@ class ViewController: UIViewController {
     socket.delegate = self
     socket.connect()
     
+    if WCSession.isSupported() {//4.1
+      session = WCSession.default//4.2
+      session?.delegate = self//4.3
+      session?.activate()//4.4
+    }
   }
 
   override func viewWillAppear(_ animated: Bool) {
@@ -125,10 +128,7 @@ extension ViewController : WebSocketDelegate {
                 print("websocket is disconnected: \(reason) with code: \(code)")
             case .text(let string):
                 handelView(string: string)
-    //            if let validSession = self.session, validSession.isReachable {//5.1
-    //              let data: [String: Any] = ["iPhone": "Data from iPhone" as Any] // Create your Dictionay as per uses
-    //              validSession.sendMessage(data, replyHandler: nil, errorHandler: nil)
-    //            }
+                OverlayView.lineStyle = (width: CGFloat(3.0), color: UIColor.red)
             case .binary(let data):
                 print("Received data: \(data.count)")
             case .ping(_):
@@ -147,8 +147,8 @@ extension ViewController : WebSocketDelegate {
                 handleError(error)
             }
     }
+    
     func handelView(string: String) {
-        print(string)
         guard let data = string.data(using: .utf16),
           let jsonData = try? JSONSerialization.jsonObject(with: data),
           let jsonDict = jsonData as? [String: Any],
@@ -160,6 +160,14 @@ extension ViewController : WebSocketDelegate {
           let messageData = jsonDict["data"] as? [String: Any],
           let messageText = messageData["text"] as? String {
             PopupView.showView(text: messageText)
+            sendWatchData(text: messageText)
+        }
+    }
+    
+    func sendWatchData(text: String) {
+        if let validSession = self.session, validSession.isReachable {
+          let data: [String: Any] = ["iPhone": text as Any]
+          validSession.sendMessage(data, replyHandler: nil, errorHandler: nil)
         }
     }
 
@@ -173,7 +181,6 @@ extension ViewController : WebSocketDelegate {
         }
     }
 }
-
 
 // MARK: - CameraFeedManagerDelegate Methods
 extension ViewController: CameraFeedManagerDelegate {
@@ -285,7 +292,27 @@ extension ViewController: CameraFeedManagerDelegate {
   }
 }
 
-
+// MARK: - WCSession delegate functions
+extension ViewController: WCSessionDelegate {
+  
+  func sessionDidBecomeInactive(_ session: WCSession) {
+  }
+  
+  func sessionDidDeactivate(_ session: WCSession) {
+  }
+  
+  func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
+  }
+  
+  func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+    print("received message: \(message)")
+    DispatchQueue.main.async { //6
+      if let value = message["watch"] as? String {
+        print(value)
+      }
+    }
+  }
+}
 // MARK: - Private enums
 /// UI coinstraint values
 fileprivate enum Traits {

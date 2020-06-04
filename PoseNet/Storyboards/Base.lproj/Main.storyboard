@@ -27,7 +27,7 @@
                                     <color key="titleColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <segue destination="BYZ-38-t0r" kind="show" id="lMZ-Fe-xUg"/>
+                                    <segue destination="7g2-u7-i1H" kind="show" id="JoG-nA-GGV"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -43,7 +43,67 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Spq-ro-B1w" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-720" y="167"/>
+            <point key="canvasLocation" x="-1062" y="138"/>
+        </scene>
+        <!--Select one-->
+        <scene sceneID="L6x-5r-Gq8">
+            <objects>
+                <tableViewController id="7Ph-Ru-aUn" customClass="TrainTableviewController" customModule="PoseNet" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="cwt-ae-kJT">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="separatorColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="TrainCell" rowHeight="279" id="fdd-0b-ZAh" customClass="TrainTableViewCellCollectionViewCell" customModule="PoseNet" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="414" height="279"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="TrainCell" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="fdd-0b-ZAh" id="EIa-au-ojN">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="279"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xDV-4A-uSX">
+                                            <rect key="frame" x="171.5" y="11" width="71.5" height="33.5"/>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <fontDescription key="fontDescription" type="boldSystem" pointSize="28"/>
+                                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cly-rb-Fnq">
+                                            <rect key="frame" x="93" y="64.5" width="240" height="193.5"/>
+                                        </imageView>
+                                    </subviews>
+                                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <constraints>
+                                        <constraint firstAttribute="bottomMargin" secondItem="cly-rb-Fnq" secondAttribute="bottom" constant="10" id="NQz-uw-E8y"/>
+                                        <constraint firstItem="cly-rb-Fnq" firstAttribute="centerX" secondItem="EIa-au-ojN" secondAttribute="centerX" id="PmK-Qy-DhC"/>
+                                        <constraint firstItem="xDV-4A-uSX" firstAttribute="top" secondItem="EIa-au-ojN" secondAttribute="topMargin" id="VLy-IH-QBh"/>
+                                        <constraint firstItem="cly-rb-Fnq" firstAttribute="top" secondItem="xDV-4A-uSX" secondAttribute="bottom" constant="20" id="al6-MA-CHS"/>
+                                        <constraint firstItem="xDV-4A-uSX" firstAttribute="centerX" secondItem="EIa-au-ojN" secondAttribute="centerX" id="jOE-Ag-GR1"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="trainImage" destination="cly-rb-Fnq" id="NXJ-Kc-YkH"/>
+                                    <outlet property="trainLabel" destination="xDV-4A-uSX" id="4o5-61-gMg"/>
+                                    <segue destination="BYZ-38-t0r" kind="showDetail" id="xRm-p9-RrM"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="7Ph-Ru-aUn" id="Ak3-2c-aqd"/>
+                            <outlet property="delegate" destination="7Ph-Ru-aUn" id="2Yg-WL-Qcp"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Select one" id="4RS-ho-sy6">
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="keyPath" value="YES"/>
+                        </userDefinedRuntimeAttributes>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6Yu-a1-R0U" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="318.84057971014494" y="853.79464285714278"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -76,19 +136,19 @@
                                         </constraints>
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ktX-aJ-Dq6">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" adjustsImageSizeForAccessibilityContentSizeCategory="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ktX-aJ-Dq6">
                                         <rect key="frame" x="157" y="589" width="100" height="70"/>
-                                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="70" id="eUm-ag-TzK"/>
                                             <constraint firstAttribute="width" constant="100" id="qWC-2d-tVz"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="25"/>
+                                        <fontDescription key="fontDescription" name="CourierNewPS-BoldMT" family="Courier New" pointSize="20"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="1" maxY="0.0"/>
                                         <size key="titleShadowOffset" width="6" height="0.0"/>
-                                        <state key="normal" image="camera.rotate" catalog="system">
-                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <state key="normal" title="Finish">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="changeCamera:" destination="BYZ-38-t0r" eventType="touchUpInside" id="GiG-QE-hEU"/>
@@ -132,11 +192,29 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="137.94642857142856"/>
+            <point key="canvasLocation" x="1500" y="854"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Qdn-lC-WhE">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7g2-u7-i1H" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="XWf-QH-ati"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="av9-DZ-fmT">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="7Ph-Ru-aUn" kind="relationship" relationship="rootViewController" id="BQh-As-jVB"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u9J-75-u65" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-591.304347826087" y="853.79464285714278"/>
         </scene>
     </scenes>
     <resources>
-        <image name="camera.rotate" catalog="system" width="64" height="48"/>
         <image name="logo_transparent" width="400" height="400"/>
     </resources>
 </document>
